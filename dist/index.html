@@ -7,6 +7,31 @@
     <title>Do-It</title>
   </head>
   <body>
+    <header>
+      <h1>Do-It</h1>
+      <button>New Project</button>
+    </header>
+    <main></main>
+    <footer><p>Made by Jack Wai Tung Lo</p></footer>
+    <dialog>
+      <form>
+        <p>New Project Creation</p>
+        <div class="project-creation-input">
+          <label for="title">Title:</label>
+          <input type="text" id="title" name="title" required />
+        </div>
+        <div class="project-creation-input">
+          <label for="desc">Description:</label>
+          <input type="desc" id="desc" name="desc" required />
+        </div>
+        <div>
+          <div id="buttons-container">
+            <button type="reset" id="close">close</button>
+            <button type="submit" id="submit">submit</button>
+          </div>
+        </div>
+      </form>
+    </dialog>
     <script src="main.js"></script>
   </body>
 </html>
