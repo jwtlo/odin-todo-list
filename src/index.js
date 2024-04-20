@@ -1,48 +1,5 @@
-import Project from './project.js';
-
-const Storage = class {
-  projects; // Key: project name, Value: project
-
-  constructor() {
-    this.projects = {};
-  }
-
-  // Checks if local storage has been used
-  checkLocalStorage() {
-
-  }
-
-  loadFromLocalStorage() {
-
-  }
-
-  storeToLocalStorage() {
-
-  }
-
-  addProject(project) {
-    // requirement: projects have to have unique names
-
-  }
-
-  removeProject(project_name) {
-
-  }
-
-
-  // Project edited directly by controller
-  // editProject(project_name, ...) {
-
-  // }
-
-  getProject(project_name) {
-
-  }
-
-  getProjects() {
-    return projects
-  }
-}
+import Project from "./project.js"
+import Storage from "./storage.js"
 
 class Controller {
   storage;

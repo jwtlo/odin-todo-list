@@ -10,4 +10,13 @@ export default class Project {
     this.description = description;
     this.todos = []
   }
+
+  // Maybe for use in storage
+  // static replacer(key, value) {
+    // return value;
+  // }
+
+  // static reviver(key, value) {
+  //   return value;
+  // }
 }
