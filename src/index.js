@@ -1,4 +1,3 @@
-import Controller from "./controller"
+import _controller from "./controller"
 
-const c = new Controller();
-c.initialize();
+_controller.initialize();

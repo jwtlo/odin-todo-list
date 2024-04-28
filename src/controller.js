@@ -1,14 +1,17 @@
-import Project from "./project.js"
-import Storage from "./storage.js"
-import Painter from "./painter.js"
+import Project from "./project.js";
+import _storage from "./storage.js";
+import _painter from "./painter.js";
 
-export default class Controller {
+class Controller {
   storage;
   painter;
 
   constructor() {
-    this.storage = new Storage();
-    this.painter = new Painter();
+    this.storage = _storage;
+    this.painter = _painter;
+
+    this.newProjectClick = this.newProjectClick.bind(this);
+    this.deleteProjectClick = this.deleteProjectClick.bind(this);
   }
 
   initialize() {
@@ -17,55 +20,73 @@ export default class Controller {
       this.painter.seeAllProjects(this.storage.getProjects());
 
       // add buttonAddProject to add project button
+    } else {
+      const newProject = new Project("Default", "Let's get started!");
+      this.storage.addProject(newProject)
     }
+    this.initializeModal();
   }
 
-  static newProjectClick(e) {
+  initializeModal() {
+    const modalEl = document.querySelector("dialog");
 
+    const closeEl = document.querySelector("#modal-close");
+    closeEl.addEventListener("click", (e) => {
+      // e.preventDefault(); // Causes modal to keep it's information
+      document.querySelector(".modal-warning").classList.remove("active");
+      document.querySelector(".modal-warning").classList.add("inactive");
+      modalEl.close();
+    });
+
+    const formEl = document.querySelector("dialog > form");
+    formEl.addEventListener("submit", (e) => {
+      e.preventDefault();
+
+      const formData = new FormData(e.target);
+      const formProps = Object.fromEntries(formData);
+      if (formProps["title"] in this.storage.getProjects()) {
+        document.querySelector(".modal-warning").classList.remove("inactive");
+        document.querySelector(".modal-warning").classList.add("active");
+        return;
+      }
+
+      const newProject = new Project(...Object.values(formProps));
+      this.storage.addProject(newProject);
+      this.painter.seeAllProjects(this.storage.getProjects());
+
+      document.querySelector(".modal-warning").classList.remove("active");
+      document.querySelector(".modal-warning").classList.add("inactive");
+      formEl.reset();
+      modalEl.close();
+    });
   }
 
-  static closeModalClick(e) {
-
+  newProjectClick(e) {
+    document.querySelector("dialog").showModal();
   }
 
-  static saveModalClick(e) {
-
+  deleteProjectClick(e) {
+    this.storage.removeProject(e.target.dataset.projectName);
+    this.painter.seeAllProjects(this.storage.getProjects());
   }
 
-  static deleteProjectClick(e) {
+  enterProjectClick(e) { }
 
-  }
+  backClick(e) { }
 
-  static enterProjectClick(e) {
+  editProjectClick(e) { }
 
-  }
+  editDeleteProjectClick(e) { }
 
-  static editProjectClick(e) {
+  backProjectClick(e) { }
 
-  }
+  addTodoClick(e) { }
 
-  static editDeleteProjectClick(e) {
+  editTodoClick(e) { }
 
-  }
+  saveTodoClick(e) { }
 
-  static backProjectClick(e) {
+  deleteTodoClick(e) { }
+}
 
-  }
-
-  static addTodoClick(e) {
-
-  }
-
-  static editTodoClick(e) {
-
-  }
-
-  static saveTodoClick(e) {
-
-  }
-
-  static deleteTodoClick(e) {
-
-  }
-
-};
+export default new Controller();

@@ -1,6 +1,6 @@
-import Controller from "./controller.js";
+import controller from "./controller.js";
 
-export default class Painter {
+class Painter {
   clear() {
     const mainEl = document.querySelector("main");
     mainEl.innerHTML = "";
@@ -29,12 +29,14 @@ export default class Painter {
       const delBtnEl = document.createElement("button");
       delBtnEl.textContent = "delete";
       delBtnEl.className = "delete-project-btn";
-      delBtnEl.addEventListener("click", Controller.deleteProjectClick);
+      delBtnEl.dataset.projectName = project.name;
+      delBtnEl.addEventListener("click", controller.deleteProjectClick);
 
       const enterBtnEl = document.createElement("button");
       enterBtnEl.textContent = "enter";
       enterBtnEl.className = "enter-project-btn";
-      enterBtnEl.addEventListener("click", Controller.enterProjectClick);
+      enterBtnEl.dataset.projectName = project.name;
+      enterBtnEl.addEventListener("click", controller.enterProjectClick);
 
       const btnsContainerEl = document.createElement("div");
       btnsContainerEl.className = "btns-container";
@@ -43,7 +45,6 @@ export default class Painter {
 
       const projectEl = document.createElement("article");
       projectEl.className = "project-card";
-      projectEl.dataProjectName = project.name;
       projectEl.appendChild(infoEl);
       projectEl.appendChild(btnsContainerEl);
 
@@ -54,8 +55,9 @@ export default class Painter {
     const newProjectBtnEl = document.createElement("button");
     newProjectBtnEl.textContent = "New Project";
     newProjectBtnEl.className = "header-btn";
-    newProjectBtnEl.addEventListener("click", Controller.newProjectClick);
-    const headerBtnContainer = document.querySelector(".header-btns-container");
+    newProjectBtnEl.addEventListener("click", controller.newProjectClick);
+    const headerBtnContainer = document.querySelector(".header-btns-container-right");
+    headerBtnContainer.innerHTML = "";
     headerBtnContainer.appendChild(newProjectBtnEl);
   }
 
@@ -77,7 +79,7 @@ export default class Painter {
 
     const addTodoBtnEl = document.createElement("button");
     addTodoBtnEl.className = "add-todo-button";
-    addTodoBtnEl.addEventListener("click", Controller.addTodoClick);
+    addTodoBtnEl.addEventListener("click", controller.addTodoClick);
 
     const todosContainerEl = document.createElement("div");
     todosContainerEl.className = "todos-container";
@@ -192,7 +194,7 @@ export default class Painter {
 
     const editBtnEl = document.createElement("button");
     editBtnEl.class = "todo-edit-btn";
-    editBtnEl.addEventListener("click", Controller.editTodoClick);
+    editBtnEl.addEventListener("click", controller.editTodoClick);
     const editWrapperEl = document.createElement("div");
     editWrapperEl.class = "todo-edit-btn-wrapper";
     editWrapperEl.appendChild(editBtnEl);
@@ -204,6 +206,8 @@ export default class Painter {
     return todoEl;
   }
 }
+
+export default new Painter();
 
 {
   /* <div class="todo-card">

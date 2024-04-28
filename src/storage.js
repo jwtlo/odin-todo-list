@@ -1,6 +1,6 @@
 import Project from './project.js';
 
-export default Storage = class {
+class Storage {
   projects; // Key: project name, Value: project
 
   constructor() {
@@ -26,10 +26,12 @@ export default Storage = class {
   addProject(newProject) {
     // requirement: projects have to have unique names
     this.projects[newProject.name] = newProject
+    this.storeToLocalStorage();
   }
 
   removeProject(projectName) {
-    delete projects[projectName]
+    delete this.projects[projectName]
+    this.storeToLocalStorage();
   }
 
   // Project edited directly by controller
@@ -45,6 +47,8 @@ export default Storage = class {
     return this.projects
   }
 }
+
+export default new Storage();
 
 // let s = new Storage();
 // s.addProject(new Project("abc"," def"));
