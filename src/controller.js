@@ -12,6 +12,8 @@ class Controller {
 
     this.newProjectClick = this.newProjectClick.bind(this);
     this.deleteProjectClick = this.deleteProjectClick.bind(this);
+    this.enterProjectClick = this.enterProjectClick.bind(this);
+    this.backClick = this.backClick.bind(this);
   }
 
   initialize() {
@@ -70,9 +72,14 @@ class Controller {
     this.painter.seeAllProjects(this.storage.getProjects());
   }
 
-  enterProjectClick(e) { }
+  enterProjectClick(e) {
+    const project = this.storage.getProject(e.target.dataset.projectName);
+    this.painter.loadProject(project);
+  }
 
-  backClick(e) { }
+  backClick(e) {
+    this.painter.seeAllProjects(this.storage.getProjects());
+  }
 
   editProjectClick(e) { }
 

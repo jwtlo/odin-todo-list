@@ -56,13 +56,15 @@ class Painter {
     newProjectBtnEl.textContent = "New Project";
     newProjectBtnEl.className = "header-btn";
     newProjectBtnEl.addEventListener("click", controller.newProjectClick);
-    const headerBtnContainer = document.querySelector(".header-btns-container-right");
-    headerBtnContainer.innerHTML = "";
-    headerBtnContainer.appendChild(newProjectBtnEl);
+    const rightBtnContainer = document.querySelector(".header-btns-container-right");
+    rightBtnContainer.innerHTML = "";
+    rightBtnContainer.appendChild(newProjectBtnEl);
+
+    document.querySelector(".header-btns-container-left").innerHTML = "";
   }
 
   loadProject(project) {
-    const mainEl = clear();
+    const mainEl = this.clear();
 
     const projectNameEl = document.createElement("h2");
     projectNameEl.textContent = project.name;
@@ -78,6 +80,7 @@ class Painter {
     projectInfoEl.appendChild(projectDescEl);
 
     const addTodoBtnEl = document.createElement("button");
+    addTodoBtnEl.textContent = "Add Todo";
     addTodoBtnEl.className = "add-todo-button";
     addTodoBtnEl.addEventListener("click", controller.addTodoClick);
 
@@ -93,6 +96,19 @@ class Painter {
     projectContainerEl.appendChild(projectInfoEl);
     projectContainerEl.appendChild(addTodoBtnEl);
     projectContainerEl.appendChild(todosContainerEl);
+
+    mainEl.appendChild(projectContainerEl);
+
+    const backBtnEl = document.createElement("button");
+    backBtnEl.textContent = "Back";
+    backBtnEl.className = "header-btn";
+    backBtnEl.addEventListener("click", controller.backClick);
+
+    const leftBtnContainer = document.querySelector(".header-btns-container-left");
+    leftBtnContainer.innerHTML = "";
+    leftBtnContainer.appendChild(backBtnEl);
+
+    document.querySelector(".header-btns-container-right").innerHTML = "";
   }
 
   createTodo(todo) {
