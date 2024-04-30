@@ -87,8 +87,8 @@ class Painter {
     const todosContainerEl = document.createElement("div");
     todosContainerEl.className = "todos-container";
 
-    for (const todo of project.todos) {
-      todosContainerEl.appendChild(createTodo(todo));
+    for (const todo of Object.values(project.todos)) {
+      todosContainerEl.appendChild(this.createTodo(todo));
     }
 
     const projectContainerEl = document.createElement("div");
@@ -111,15 +111,13 @@ class Painter {
     document.querySelector(".header-btns-container-right").innerHTML = "";
   }
 
-  createTodo(todo) {
-    assert(todo);
-
+  createTodo(todo, editing = false) {
     // title
     const titleLabelEl = document.createElement("label");
     titleLabelEl.textContent = "Title:";
     const titleInputEl = document.createElement("input");
     titleInputEl.type = "text";
-    titleInputEl.name = "todo-title";
+    titleInputEl.name = "title";
     titleInputEl.id = "todo-title";
     titleInputEl.class = "todo-title";
     titleInputEl.value = todo.title;
@@ -133,7 +131,7 @@ class Painter {
     const descLabelEl = document.createElement("label");
     descLabelEl.textContent = "Description:";
     const descInputEl = document.createElement("textarea");
-    descInputEl.name = "todo-desc";
+    descInputEl.name = "description";
     descInputEl.id = "todo-desc";
     descInputEl.class = "todo-desc";
     descInputEl.cols = "30";
@@ -150,7 +148,7 @@ class Painter {
     dueLabelEl.textContent = "Due:";
     const dueInputEl = document.createElement("input");
     dueInputEl.type = "text";
-    dueInputEl.name = "todo-due";
+    dueInputEl.name = "due";
     dueInputEl.id = "todo-due";
     dueInputEl.class = "todo-due";
     dueInputEl.value = todo.due;
@@ -164,7 +162,7 @@ class Painter {
     const prioLabelEl = document.createElement("label");
     prioLabelEl.textContent = "Priority:";
     const prioSelectEl = document.createElement("select");
-    prioSelectEl.name = "todo-prio";
+    prioSelectEl.name = "priority";
     prioSelectEl.id = "todo-prio";
     for (let i = 0; i <= 5; i++) {
       const optionEl = document.createElement("option");
@@ -184,7 +182,7 @@ class Painter {
     const notesLabelEl = document.createElement("label");
     notesLabelEl.textContent = "Notes:";
     const notesInputEl = document.createElement("textarea");
-    notesInputEl.name = "todo-notes";
+    notesInputEl.name = "notes";
     notesInputEl.id = "todo-notes";
     notesInputEl.class = "todo-notes";
     notesInputEl.cols = "30";
@@ -198,28 +196,56 @@ class Painter {
 
     // parents
     const fieldsetEl = document.createElement("fieldset");
-    fieldsetEl.disabled = "disabled";
-    const formEl = document.createElement("form");
-
+    if (!editing) {
+      fieldsetEl.disabled = true;
+    }
     fieldsetEl.appendChild(titleWrapperEl);
     fieldsetEl.appendChild(descWrapperEl);
     fieldsetEl.appendChild(dueWrapperEl);
     fieldsetEl.appendChild(prioWrapperEl);
     fieldsetEl.appendChild(notesWrapperEl);
-    formEl.appendChild(fieldsetEl);
 
-    const editBtnEl = document.createElement("button");
-    editBtnEl.class = "todo-edit-btn";
-    editBtnEl.addEventListener("click", controller.editTodoClick);
-    const editWrapperEl = document.createElement("div");
-    editWrapperEl.class = "todo-edit-btn-wrapper";
-    editWrapperEl.appendChild(editBtnEl);
+    const formEl = document.createElement("form");
+    formEl.appendChild(fieldsetEl);
+    formEl.appendChild(this.makeTodoBtns(todo.id, editing));
 
     const todoEl = document.createElement("div");
     todoEl.appendChild(formEl);
-    todoEl.appendChild(editWrapperEl);
 
     return todoEl;
+  }
+
+  makeTodoBtns(id, editing) {
+    const btnsContainerEl = document.createElement("div");
+    btnsContainerEl.className = "todo-btns-container"
+    if (!editing) {
+      const editBtnEl = document.createElement("button");
+      editBtnEl.textContent = "Edit"
+      editBtnEl.class = "todo-edit-btn";
+      editBtnEl.dataset.id = id;
+      editBtnEl.addEventListener("click", controller.editTodoClick);
+      btnsContainerEl.appendChild(editBtnEl);
+    } else {
+      const saveBtnEl = document.createElement("button");
+      saveBtnEl.textContent = "Save"
+      saveBtnEl.class = "todo-save-btn";
+      saveBtnEl.dataset.id = id;
+      saveBtnEl.addEventListener("click", controller.saveTodoClick);
+      btnsContainerEl.appendChild(saveBtnEl);
+
+      const deleteBtnEl = document.createElement("button");
+      deleteBtnEl.textContent = "Delete"
+      deleteBtnEl.class = "todo-delete-btn";
+      deleteBtnEl.dataset.id = id;
+      deleteBtnEl.addEventListener("click", controller.deleteTodoClick);
+      btnsContainerEl.appendChild(deleteBtnEl);
+    }
+    return btnsContainerEl;
+  }
+
+  addNewTodo(todo) {
+    const todoEl = this.createTodo(todo, true);
+    document.querySelector(".todos-container").appendChild(todoEl);
   }
 }
 

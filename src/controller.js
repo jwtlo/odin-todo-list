@@ -1,4 +1,5 @@
 import Project from "./project.js";
+import Todo from './todo';
 import _storage from "./storage.js";
 import _painter from "./painter.js";
 
@@ -14,6 +15,10 @@ class Controller {
     this.deleteProjectClick = this.deleteProjectClick.bind(this);
     this.enterProjectClick = this.enterProjectClick.bind(this);
     this.backClick = this.backClick.bind(this);
+    this.addTodoClick = this.addTodoClick.bind(this);
+    this.saveTodoClick = this.saveTodoClick.bind(this);
+    this.deleteTodoClick = this.deleteTodoClick.bind(this);
+    this.editTodoClick = this.editTodoClick.bind(this);
   }
 
   initialize() {
@@ -87,13 +92,64 @@ class Controller {
 
   backProjectClick(e) { }
 
-  addTodoClick(e) { }
+  addTodoClick(e) {
+    const newTodo = new Todo();
+    this.painter.addNewTodo(newTodo);
+  }
 
-  editTodoClick(e) { }
+  saveTodoClick(e) {
+    e.preventDefault();
+    const formData = new FormData(e.target.parentElement.parentElement);
+    const formProps = Object.fromEntries(formData);
 
-  saveTodoClick(e) { }
+    const newTodo = new Todo(formProps);
+    newTodo.id = e.target.dataset.id;
 
-  deleteTodoClick(e) { }
+    const projectName = document.querySelector(".project-name").textContent;
+    this.storage.getProject(projectName).todos[newTodo.id] = newTodo;
+    this.storage.storeToLocalStorage();
+
+    this.painter.loadProject(this.storage.getProject(projectName));
+  }
+
+  deleteTodoClick(e) {
+    e.preventDefault();
+
+    const projectName = document.querySelector(".project-name").textContent;
+    delete this.storage.getProject(projectName).todos[e.target.dataset.id];
+    this.storage.storeToLocalStorage();
+
+    this.painter.loadProject(this.storage.getProject(projectName));
+  }
+
+  editTodoClick(e) {
+    e.preventDefault();
+    e.target.parentElement.previousSibling.disabled = false;
+    e.target.parentElement.replaceWith(this.painter.makeTodoBtns(e.target.dataset.id, true));
+  }
+
+  // formEl.addEventListener("submit", (e) => {
+  //   e.preventDefault();
+
+  //   const formData = new FormData(e.target);
+  //   const formProps = Object.fromEntries(formData);
+  //   if (formProps["title"] in this.storage.getProjects()) {
+  //     document.querySelector(".modal-warning").classList.remove("inactive");
+  //     document.querySelector(".modal-warning").classList.add("active");
+  //     return;
+  //   }
+
+  //   const newProject = new Project(...Object.values(formProps));
+  //   this.storage.addProject(newProject);
+  //   this.painter.seeAllProjects(this.storage.getProjects());
+
+  //   document.querySelector(".modal-warning").classList.remove("active");
+  //   document.querySelector(".modal-warning").classList.add("inactive");
+  //   formEl.reset();
+  //   modalEl.close();
+  // });
+
+
 }
 
 export default new Controller();
