@@ -9,6 +9,8 @@ class Painter {
 
   seeAllProjects(projects) {
     const mainEl = this.clear();
+    controller.setUpModal("add");
+
     const projectsContainerEl = document.createElement("div");
     projectsContainerEl.className = "project-cards-container";
 
@@ -65,6 +67,7 @@ class Painter {
 
   loadProject(project) {
     const mainEl = this.clear();
+    controller.setUpModal("edit");
 
     const projectNameEl = document.createElement("h2");
     projectNameEl.textContent = project.name;
@@ -79,9 +82,14 @@ class Painter {
     projectInfoEl.appendChild(projectNameEl);
     projectInfoEl.appendChild(projectDescEl);
 
+    const editProjectButtonEl = document.createElement("button");
+    editProjectButtonEl.textContent = "Edit Project";
+    editProjectButtonEl.className = "edit-project-btn";
+    editProjectButtonEl.addEventListener("click", controller.editProjectClick);
+
     const addTodoBtnEl = document.createElement("button");
     addTodoBtnEl.textContent = "Add Todo";
-    addTodoBtnEl.className = "add-todo-button";
+    addTodoBtnEl.className = "add-todo-btn";
     addTodoBtnEl.addEventListener("click", controller.addTodoClick);
 
     const todosContainerEl = document.createElement("div");
@@ -94,6 +102,7 @@ class Painter {
     const projectContainerEl = document.createElement("div");
     projectContainerEl.className = "project-container";
     projectContainerEl.appendChild(projectInfoEl);
+    projectContainerEl.appendChild(editProjectButtonEl);
     projectContainerEl.appendChild(addTodoBtnEl);
     projectContainerEl.appendChild(todosContainerEl);
 

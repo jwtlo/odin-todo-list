@@ -15,6 +15,7 @@ class Controller {
     this.deleteProjectClick = this.deleteProjectClick.bind(this);
     this.enterProjectClick = this.enterProjectClick.bind(this);
     this.backClick = this.backClick.bind(this);
+    this.editProjectClick = this.editProjectClick.bind(this);
     this.addTodoClick = this.addTodoClick.bind(this);
     this.saveTodoClick = this.saveTodoClick.bind(this);
     this.deleteTodoClick = this.deleteTodoClick.bind(this);
@@ -24,48 +25,72 @@ class Controller {
   initialize() {
     if (this.storage.checkLocalStorage) {
       this.storage.loadFromLocalStorage();
-      this.painter.seeAllProjects(this.storage.getProjects());
-
-      // add buttonAddProject to add project button
     } else {
       const newProject = new Project("Default", "Let's get started!");
       this.storage.addProject(newProject)
     }
-    this.initializeModal();
-  }
+    this.painter.seeAllProjects(this.storage.getProjects());
 
-  initializeModal() {
     const modalEl = document.querySelector("dialog");
 
-    const closeEl = document.querySelector("#modal-close");
+    const closeEl = document.querySelector("#modal-close-btn");
     closeEl.addEventListener("click", (e) => {
-      // e.preventDefault(); // Causes modal to keep it's information
-      document.querySelector(".modal-warning").classList.remove("active");
+      // e.preventDefault(); // Causes modal to keep its information
       document.querySelector(".modal-warning").classList.add("inactive");
       modalEl.close();
     });
 
-    const formEl = document.querySelector("dialog > form");
-    formEl.addEventListener("submit", (e) => {
-      e.preventDefault();
+    const deleteEl = document.querySelector("#modal-delete-btn");
+    deleteEl.addEventListener("click", (e) => {
+      document.querySelector(".modal-warning").classList.add("inactive");
+      this.storage.removeProject(document.querySelector(".project-name").textContent);
+      this.storage.storeToLocalStorage();
+      this.painter.seeAllProjects(this.storage.getProjects());
+      modalEl.close();
+    });
+  }
 
+  setUpModal(mode = "add") {
+    const modalEl = document.querySelector("dialog");
+
+    if (mode === "add") {
+      document.querySelector("#modal-delete-btn").classList.add("inactive");
+    } else {
+      document.querySelector("#modal-delete-btn").classList.remove("inactive");
+    }
+
+    const formEl = document.querySelector("dialog > form");
+    formEl.onsubmit = (e) => {
+      e.preventDefault();
       const formData = new FormData(e.target);
       const formProps = Object.fromEntries(formData);
-      if (formProps["title"] in this.storage.getProjects()) {
-        document.querySelector(".modal-warning").classList.remove("inactive");
-        document.querySelector(".modal-warning").classList.add("active");
-        return;
+
+      if (mode === "add") {
+        if (formProps["title"] in this.storage.getProjects()) {
+          document.querySelector(".modal-warning").classList.remove("inactive");
+          return;
+        }
+
+        const newProject = new Project(...Object.values(formProps));
+        this.storage.addProject(newProject);
+        this.painter.seeAllProjects(this.storage.getProjects());
+      } else {
+        const currProject = this.storage.getProject(document.querySelector(".project-name").textContent);
+        if (formProps["title"] !== currProject.title && formProps["title"] in this.storage.getProjects()) {
+          document.querySelector(".modal-warning").classList.remove("inactive");
+          return;
+        }
+        const updatedProject = new Project(...Object.values(formProps));
+        updatedProject.todos = currProject.todos;
+        this.storage.removeProject(currProject.title);
+        this.storage.addProject(updatedProject);
+        this.painter.loadProject(updatedProject);
       }
 
-      const newProject = new Project(...Object.values(formProps));
-      this.storage.addProject(newProject);
-      this.painter.seeAllProjects(this.storage.getProjects());
-
-      document.querySelector(".modal-warning").classList.remove("active");
       document.querySelector(".modal-warning").classList.add("inactive");
       formEl.reset();
       modalEl.close();
-    });
+    };
   }
 
   newProjectClick(e) {
@@ -86,11 +111,13 @@ class Controller {
     this.painter.seeAllProjects(this.storage.getProjects());
   }
 
-  editProjectClick(e) { }
-
-  editDeleteProjectClick(e) { }
-
-  backProjectClick(e) { }
+  editProjectClick(e) {
+    const modalEl = document.querySelector("dialog");
+    document.querySelector("dialog #title").value = document.querySelector(".project-name").textContent;
+    document.querySelector("dialog #desc").value = document.querySelector(".project-desc").textContent;
+    document.querySelector("#modal-delete-btn").classList.remove("inactive");
+    modalEl.showModal();
+  }
 
   addTodoClick(e) {
     const newTodo = new Todo();

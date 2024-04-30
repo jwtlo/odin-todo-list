@@ -29,9 +29,14 @@
           <label for="desc">Description:</label>
           <input type="desc" id="desc" name="desc" required />
         </div>
-        <div id="modal-btns-container">
-          <button type="reset" id="modal-close">close</button>
-          <button type="submit" id="modal-submit">submit</button>
+        <div class="modal-btns-container">
+          <div class="left-btns">
+            <button type="reset" id="modal-delete-btn" class="inactive">delete</button>
+          </div>
+          <div class="right-btns">
+            <button type="reset" id="modal-close-btn">close</button>
+            <button type="submit" id="modal-submit-btn">submit</button>
+          </div>
         </div>
       </form>
     </dialog>
