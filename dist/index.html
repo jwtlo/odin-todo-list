@@ -17,17 +17,17 @@
     <footer><p>Made by Jack Wai Tung Lo</p></footer>
     <dialog>
       <form>
-        <p>New Project Creation</p>
+        <h1>New Project Creation</h1>
         <div class="modal-warning inactive">
           <p>You already have a project with this name!</p>
         </div>
-        <div class="project-creation-input">
+        <div class="project-creation-input-wrapper">
           <label for="title">Title:</label>
-          <input type="text" id="title" name="title" required />
+          <input type="text" id="title" class="project-creation-input" name="title" maxlength="50" required />
         </div>
-        <div class="project-creation-input">
+        <div class="project-creation-input-wrapper">
           <label for="desc">Description:</label>
-          <input type="desc" id="desc" name="desc" required />
+          <textarea id="desc" class="project-creation-input" name="desc" cols="30" rows="3" maxlength="200"></textarea>
         </div>
         <div class="modal-btns-container">
           <div class="left-btns">

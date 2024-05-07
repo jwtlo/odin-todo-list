@@ -92,6 +92,11 @@ class Painter {
     addTodoBtnEl.className = "add-todo-btn";
     addTodoBtnEl.addEventListener("click", controller.addTodoClick);
 
+    const projBtnsEl = document.createElement("div");
+    projBtnsEl.className = "project-btns-container"
+    projBtnsEl.appendChild(editProjectButtonEl);
+    projBtnsEl.appendChild(addTodoBtnEl);
+
     const todosContainerEl = document.createElement("div");
     todosContainerEl.className = "todos-container";
 
@@ -102,8 +107,7 @@ class Painter {
     const projectContainerEl = document.createElement("div");
     projectContainerEl.className = "project-container";
     projectContainerEl.appendChild(projectInfoEl);
-    projectContainerEl.appendChild(editProjectButtonEl);
-    projectContainerEl.appendChild(addTodoBtnEl);
+    projectContainerEl.appendChild(projBtnsEl);
     projectContainerEl.appendChild(todosContainerEl);
 
     mainEl.appendChild(projectContainerEl);
@@ -129,6 +133,7 @@ class Painter {
     titleInputEl.name = "title";
     titleInputEl.id = "todo-title";
     titleInputEl.class = "todo-title";
+    titleInputEl.maxLength = "30";
     titleInputEl.value = todo.title;
 
     const titleWrapperEl = document.createElement("div");
@@ -143,8 +148,9 @@ class Painter {
     descInputEl.name = "description";
     descInputEl.id = "todo-desc";
     descInputEl.class = "todo-desc";
-    descInputEl.cols = "30";
-    descInputEl.rows = "5";
+    descInputEl.cols = "20";
+    descInputEl.rows = "2";
+    descInputEl.maxLength = "100"
     descInputEl.textContent = todo.description;
 
     const descWrapperEl = document.createElement("div");
@@ -194,8 +200,8 @@ class Painter {
     notesInputEl.name = "notes";
     notesInputEl.id = "todo-notes";
     notesInputEl.class = "todo-notes";
-    notesInputEl.cols = "30";
-    notesInputEl.rows = "10";
+    notesInputEl.cols = "20";
+    notesInputEl.rows = "3";
     notesInputEl.textContent = todo.notes;
 
     const notesWrapperEl = document.createElement("div");
@@ -219,6 +225,7 @@ class Painter {
     formEl.appendChild(this.makeTodoBtns(todo.id, editing));
 
     const todoEl = document.createElement("div");
+    todoEl.className = "todo-card"
     todoEl.appendChild(formEl);
 
     return todoEl;
